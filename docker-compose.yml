@@ -1,0 +1,56 @@
+name: WildDex
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - "./server/.env"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - wilddex-network
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: wilddex-api
+    ports:
+      - "4000:4000"
+    env_file:
+      - "./server/.env"
+    networks:
+      - wilddex-network
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  virtual-pokeball:
+    build:
+      context: ./virtual-pokeball
+      dockerfile: Dockerfile
+    image: wilddex-client
+    restart: always
+    ports:
+      - "5173:5173"
+    env_file:
+      - "./virtual-pokeball/.env"
+    volumes:
+      - ./virtual-pokeball:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - wilddex-network
+
+volumes:
+  pgdata:
+
+networks:
+  wilddex-network:
+    driver: bridge

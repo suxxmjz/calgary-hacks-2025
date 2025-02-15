@@ -1,1 +1,0 @@
-# calgary-hacks-2025
