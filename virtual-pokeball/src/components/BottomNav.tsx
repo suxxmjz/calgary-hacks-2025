@@ -1,51 +1,47 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, Search, Bell, User, Settings } from "lucide-react";
+import { Home, Wallet, Plus, Settings, User } from "lucide-react";
+import { Nav, Button } from "react-bootstrap";
 
 const BottomNav: React.FC = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white border-t flex justify-between items-center py-2 px-4 shadow-lg z-10">
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          `flex justify-center items-center text-gray-500 transition-all duration-200 flex-grow ${isActive ? "text-black" : ""}`
-        }
-      >
-        <Home size={24} />
-      </NavLink>
-      <NavLink
-        to="/explore"
-        className={({ isActive }) =>
-          `flex justify-center items-center text-gray-500 transition-all duration-200 flex-grow ${isActive ? "text-black" : ""}`
-        }
-      >
-        <Search size={24} />
-      </NavLink>
-      <NavLink
-        to="/notifications"
-        className={({ isActive }) =>
-          `flex justify-center items-center text-gray-500 transition-all duration-200 flex-grow ${isActive ? "text-black" : ""}`
-        }
-      >
-        <Bell size={24} />
-      </NavLink>
-      <NavLink
-        to="/profile"
-        className={({ isActive }) =>
-          `flex justify-center items-center text-gray-500 transition-all duration-200 flex-grow ${isActive ? "text-black" : ""}`
-        }
-      >
-        <User size={24} />
-      </NavLink>
-      <NavLink
-        to="/settings"
-        className={({ isActive }) =>
-          `flex justify-center items-center text-gray-500 transition-all duration-200 flex-grow ${isActive ? "text-black" : ""}`
-        }
-      >
-        <Settings size={24} />
-      </NavLink>
-    </div>
+    <Nav
+      className="fixed-bottom w-100 bg-white border-top d-flex justify-content-around align-items-center py-2 shadow-lg z-10"
+    >
+      <Nav.Item>
+        <Nav.Link as={NavLink} to="/home" className="text-center">
+          <Home size={24} className="text-gray-500" />
+          <span className="sr-only"></span>
+        </Nav.Link>
+      </Nav.Item>
+
+      {/* <Nav.Item>
+        <Nav.Link as={NavLink} to="/wallet" className="text-center">
+          <Wallet size={24} className="text-gray-500" />
+          <span className="sr-only"></span>
+        </Nav.Link>
+      </Nav.Item> */}
+
+      <Nav.Item>
+        <Nav.Link as={NavLink} to="/post" className="p-0">
+          <Button
+            variant="primary"
+            size="lg"
+            className="rounded-circle d-flex align-items-center justify-content-center"
+          >
+            <Plus size={24} className="text-white" />
+          </Button>
+          <span className="sr-only"></span>
+        </Nav.Link>
+      </Nav.Item>
+
+      <Nav.Item>
+        <Nav.Link as={NavLink} to="/profile" className="text-center">
+          <User size={24} className="text-gray-500" />
+          <span className="sr-only"></span>
+        </Nav.Link>
+      </Nav.Item>
+    </Nav>
   );
 };
 

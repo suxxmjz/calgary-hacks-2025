@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "es2015"],
-    "jsx": "react",
-    "moduleResolution": "node",
+    "target": "ESNext",                // Change from "es5" to "ESNext"
+    "module": "ESNext",                // Set module to "ESNext" for import.meta support
+    "lib": ["dom", "es2015", "esnext"],  // Add "esnext" to include the latest JavaScript features
+    "jsx": "react-jsx",                // Ensure JSX is supported for React
+    "moduleResolution": "node",        // Ensure module resolution works as expected
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
