@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix , classification_report
 import numpy as np
 import os
 
-directory = "images"
+directory = "images_train"
 test_directory = "images_test"
 
 image_height = 180
@@ -37,9 +37,14 @@ for images, labels in ds_train.take(1):
 plt.show()
 
 test_labels = []
-for label in class_names:
-    for i in range(5):
-        test_labels.append(label)
+for subfolder in os.listdir(test_directory):
+    for i in range(len(subfolder)):
+        test_labels.append(str(subfolder))
+
+test_images = []
+for subfolder in os.listdir(test_directory):
+    for image in subfolder:
+        test_labels.append(image)
 
 AUTOTUNE = tf.data.AUTOTUNE
 
@@ -49,7 +54,7 @@ ds_validation = ds_validation.cache().prefetch(buffer_size=AUTOTUNE)
 num_classes = len(class_names)
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Rescaling(1./255, input_shape=(image_height, image_length, 3)),
+    tf.keras.layers.Rescaling(1./255, input_shape=(image_height, image_width, 3)),
     tf.keras.layers.Conv2D(32, (4,4), strides=(2,2), padding='same', activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Conv2D(64, (4,4), padding='same', activation='relu'),
@@ -59,7 +64,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(256, (4,4), padding='same', activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Dropout(0.50),
-    tf.keras.layers.Flatten(input_shape=(image_height, image_length)),
+    tf.keras.layers.Flatten(input_shape=(image_height, image_width)),
     tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(num_classes)
 ])
@@ -93,13 +98,6 @@ plt.xlabel('Epoch')
 plt.legend(["Training", "Validation"])
 plt.show()
 
-test_images = []
-for index, file in enumerate(os.listdir(test_directory)):
-    image = os.path.join(test_directory, file)
-    image = tf.keras.utils.load_img(image, target_size=(image_height, image_length))
-    img_array = tf.keras.utils.img_to_array(image)
-    img_array = tf.expand_dims(img_array, 0)
-    test_images.append(img_array)
 
 classified = 0
 for index, image in enumerate(test_images):
