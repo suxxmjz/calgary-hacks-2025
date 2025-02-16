@@ -1,9 +1,8 @@
-import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useUser, RedirectToSignIn } from "@clerk/clerk-react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-// import Post from "./pages/Post";
+import Post from "./pages/Post";
 import BottomNav from "./components/BottomNav";
 
 function App() {
@@ -20,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/post" element={<Post />} /> */}
+          <Route path="/post" element={<Post />} />
         </Routes>
       </div>
       <BottomNav />
