@@ -72,8 +72,8 @@ const PostPage: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" }}>
-      <Card style={{ width: '100%', maxWidth: '500px', color: "white" }} className="d-flex flex-column">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" ,border: "none"}}>
+      <Card style={{ width: '100%', maxWidth: '500px', color: "white" ,border: "none"}} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4" style={{ color: 'black' }}>Create Post</h3>
           <Form>
