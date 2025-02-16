@@ -20,6 +20,9 @@ const SUPABASE_IMAGE_BUCKET = "wilddex-images";
 const BASE_64_IMAGE_REGEX = /^data:(.+);base64,(.*)$/;
 const PREDICTION_API_URL = `${process.env.PREDICTION_API_URL}/get-prediction`;
 
+const OPEN_ROUTER_BASE_URL = process.env.OPEN_ROUTER_BASE_URL ?? "";
+const RESPONSE_DELIMITER = "</think>";
+
 export const postsRouter = Router();
 
 // GET endpoint to fetch all posts
@@ -101,7 +104,6 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
   }
 
   // Decode the image
-
   const imageRegexMatch = encodedImage.match(BASE_64_IMAGE_REGEX);
   if (!imageRegexMatch) {
     res.status(HTTP_CODES.BAD_REQUEST).json(
@@ -142,6 +144,41 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
   const classification = classificationJSON.result as string;
 
   // Make OpenAI API call to generate conservation notes
+  const openRouterResponse = await fetch(OPEN_ROUTER_BASE_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPEN_ROUTER_API_KEY ?? ""}`,
+    },
+    body: JSON.stringify({
+      model: "cognitivecomputations/dolphin3.0-r1-mistral-24b:free",
+      messages: [
+        {
+          role: "system",
+          content: `You are a summary bot. YOu have been asked to give 3 concise and easy to understand sentences about how to help the conservation of an animal. Don't include self-dialogue, only include the response to the users query.`,
+        },
+        {
+          role: "user",
+          content: classification,
+        },
+      ],
+    }),
+  });
+  if (!openRouterResponse.ok) {
+    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
+      getFormattedApiResponse({
+        message: "Error generating conservation notes",
+        code: HTTP_CODES.INTERNAL_SERVER_ERROR,
+      })
+    );
+    return;
+  }
+
+  const openRouterResponseJSON = await openRouterResponse.json();
+
+  const openRouterResponseText =
+    openRouterResponseJSON.choices[0].message.content.split(
+      RESPONSE_DELIMITER
+    )[1];
 
   // Save the image to cloud storage
   const filePath = `uploads/${uniqueImageName}`;
@@ -170,7 +207,7 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
     userId,
     animal: classification,
     notes: notes ?? null,
-    conservationNotes: "Placeholder conservation notes", // TODO: Placeholder for now,
+    conservationNotes: openRouterResponseText,
     imageUrl: data.publicUrl,
     latitude,
     longitude,

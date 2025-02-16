@@ -12,7 +12,7 @@ CREATE TABLE "posts" (
 	"user_id" varchar NOT NULL,
 	"animal" varchar(255) NOT NULL,
 	"notes" varchar,
-	"conservation_notes" varchar NOT NULL,
+	"conservation_notes" text NOT NULL,
 	"image_url" varchar NOT NULL,
 	"latitude" double precision NOT NULL,
 	"longitude" double precision NOT NULL,
