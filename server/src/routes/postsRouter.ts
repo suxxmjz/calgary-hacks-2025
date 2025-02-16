@@ -15,6 +15,7 @@ import {
 } from "../types";
 import { randomUUID } from "crypto";
 import { supabase } from "../supabase/supabase";
+import { checkAndAwardBadges } from "../utils/bagdes";
 
 const SUPABASE_IMAGE_BUCKET = "wilddex-images";
 const BASE_64_IMAGE_REGEX = /^data:(.+);base64,(.*)$/;
@@ -154,7 +155,7 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
       messages: [
         {
           role: "system",
-          content: `You are a summary bot. YOu have been asked to give 3 concise and easy to understand sentences about how to help the conservation of an animal. Don't include self-dialogue, only include the response to the users query.`,
+          content: `You are a summary bot. You have been asked to give 3 concise and easy to understand sentences about how to help the conservation of an animal. Don't include self-dialogue, only include the response to the users query.`,
         },
         {
           role: "user",
@@ -223,6 +224,8 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
     );
     return;
   }
+
+  await checkAndAwardBadges(userId);
 
   // TODO: Check if the user qualifies for a badge, and if so, create a badge in the database
 
