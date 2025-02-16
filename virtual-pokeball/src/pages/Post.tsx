@@ -72,8 +72,8 @@ const PostPage: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" }}>
-      <Card style={{ width: '100%', maxWidth: '500px' }} className="d-flex flex-column">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px",backgroundColor: "#b0d4b2" }}>
+      <Card style={{ width: '100%', maxWidth: '500px', backgroundColor: "#2e7d32", color: "white" }} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4">Create Post</h3>
           <Form>
@@ -85,7 +85,7 @@ const PostPage: React.FC = () => {
                   autoPlay
                   width="100%"
                   height="auto"
-                  style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+                  style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' , backgroundColor:'#E5E4E2'}}
                 ></video>
               </div>
               <Button
@@ -97,6 +97,9 @@ const PostPage: React.FC = () => {
                   fontSize: '16px',
                   fontWeight: 'bold',
                   padding: '12px',
+                  backgroundColor: '#53b559',
+                  borderColor: '2px solid #53b559',
+                  color: 'white',
                 }}
               >
                 Capture Photo
@@ -125,23 +128,27 @@ const PostPage: React.FC = () => {
                 rows={3}
                 value={notes}
                 onChange={handleDescriptionChange}
-                placeholder="Add a notes"
+                placeholder="Add a note..."
                 style={{
                   borderRadius: '10px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  
                 }}
               />
             </Form.Group>
 
-            <Form.Label className="field-label">Latitude & Longitude</Form.Label>
+            <Form.Label className="field-label" style={{ color: "white" }}>Latitude & Longitude :</Form.Label>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Latitude"
                 value={location.latitude || ''}
                 readOnly
                 style={{
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  backgroundColor: '#c5c6c7', 
+                  cursor: 'not-allowed',
+                  paddingRight:'-0px',
                 }}
               />
               <FormControl
@@ -151,32 +158,47 @@ const PostPage: React.FC = () => {
                 style={{
                   borderRadius: '10px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  backgroundColor: '#c5c6c7',
+                  cursor: 'not-allowed'
                 }}
               />
             </InputGroup>
 
-            <Form.Label className="field-label">Timestamp</Form.Label>
+            <Form.Label   className="field-label" style={{ fontFamily: 'sans-serif', color: 'white' }}>Timestamp :</Form.Label>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Time Taken"
                 value={timestamp}
                 readOnly
                 style={{
+                  width: 'auto',
+                  height: '30px',
                   borderRadius: '10px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                
+                  backgroundColor:'#c5c6c7',
+                  cursor: 'not-allowed',
+                  padding: '5px',
+                  paddingLeft: '0px',
+                  paddingRight:'0px',
+                  
+                 
                 }}
               />
             </InputGroup>
           </Form>
           <Button
             variant="primary"
-            className="w-100"
+            className="w-100 btn-sm fw-bold mt-3"
             onClick={handleSubmit}
             style={{
               borderRadius: '10px',
               fontSize: '16px',
               fontWeight: 'bold',
-              padding: '20px'
+              padding: '10px 15px' ,
+              backgroundColor: '#53b559', 
+              borderColor: '#53b559', 
+              marginTop: '20px',
+              width: 'auto',
             }}
           >
             Submit Post
