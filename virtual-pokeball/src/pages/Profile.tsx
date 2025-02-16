@@ -29,25 +29,7 @@ const Profile: React.FC = () => {
   const handleLogout = () => {
     signOut();
   };
-<<<<<<< HEAD
-  return (
-    <Container className="py-4" style={{ backgroundColor:"#9fc99f",padding:'20px', borderRadius:'10px' }} >
-      <Card className="text-center p-3 mb-4 shadow-sm "  >
-        <Image
-          src={user?.imageUrl || "😊"}
-          roundedCircle
-          className="mx-auto mb-2"
-          width={100}
-          height={100}
-        />
-        <h4>{user?.fullName || user?.username || "Username"}</h4>
-        <p className="text-muted">{user?.primaryEmailAddress?.emailAddress || "Email"}</p>
-      </Card>
-      <Button variant="danger" onClick={handleLogout} className="mb-4">
-        Log Out
-      </Button>
-=======
->>>>>>> 6751e62b2bb522dc9aab655b3440ad40637bc7e3
+
 
   return (
     <div  style={{ paddingBottom: "80px" }}>
