@@ -151,3 +151,20 @@ export async function getUpvoteByPostIdAndUserId(
     return undefined;
   }
 }
+
+export async function getPostUpvotesByUserId(
+  userId: string
+): Promise<readonly number[] | undefined> {
+  try {
+    const upvotes = await dbClient.query.upvotesTable.findMany({
+      where: eq(upvotesTable.userId, userId),
+    });
+
+    return upvotes.map((upvote) => upvote.postId);
+  } catch (error) {
+    console.error(
+      `Error fetching upvotes from database: ${JSON.stringify(error)}`
+    );
+    return undefined;
+  }
+}

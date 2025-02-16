@@ -41,7 +41,7 @@ export interface Badge {
   dateEarned: Date;
 }
 
-export type AssignBadgeInsert = Omit<Badge, "id" | "dateEarned">;
+export type AssignBadgeInsert = Omit<Badge, "dateEarned">;
 
 export type RegisterRequestBody = TypedRequestBody<User>;
 

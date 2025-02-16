@@ -1,10 +1,11 @@
 CREATE TABLE "badges" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "badges_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" integer NOT NULL,
 	"user_id" varchar NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar NOT NULL,
 	"image_url" varchar NOT NULL,
-	"date_earned" timestamp with time zone DEFAULT now() NOT NULL
+	"date_earned" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "unique_id_userId_badge_pk" PRIMARY KEY("id","user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "posts" (
