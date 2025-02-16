@@ -3,6 +3,7 @@ import express from "express";
 import { router } from "./routes/router";
 import cors from "cors";
 import { getFormattedApiResponse, HTTP_CODES } from "./utils/constants";
+import { createDbClient } from "./db/db";
 dotenv.config();
 
 const app = express();
@@ -13,6 +14,8 @@ const corsOptions = {
   methods: "GET,POST,PUT,DELETE",
   credentials: true,
 };
+
+export const dbClient = createDbClient(process.env.DATABASE_URL ?? "");
 
 app.use(cors(corsOptions));
 

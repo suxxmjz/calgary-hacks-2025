@@ -1,5 +1,8 @@
-import { dbClient } from "./db";
+import "dotenv/config";
+import { createDbClient } from "./db";
 import { usersTable, badgesTable, postsTable, upvotesTable } from "./schema";
+
+const dbClient = createDbClient(process.env.DEV_DATABASE_URL ?? "");
 
 async function seedDatabase() {
   console.log("Seeding database...");
