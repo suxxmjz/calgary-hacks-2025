@@ -1,20 +1,19 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useUser, RedirectToSignIn } from "@clerk/clerk-react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Post from "./pages/Post";
 import BottomNav from "./components/BottomNav";
-import LoginPage from "./pages/LoginPage"; // Import custom login page
 import CommunityPage from "./pages/CommunityPage";
+
+export const BASE_API_URL = `${import.meta.env.VITE_BACKEND_API_URL}/api`;
 
 function App() {
   const { isSignedIn } = useUser();
-  const navigate = useNavigate();
 
   if (!isSignedIn) {
     return <RedirectToSignIn />;
-    
   }
 
   return (

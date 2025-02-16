@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from "@vis.gl/react-google-maps";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Pin,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
+import { useUser } from "@clerk/clerk-react";
+import { BASE_API_URL } from "../App";
+
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY; // Replace with your Google Maps API key
 
 const Home: React.FC = () => {
-  const API_KEY = "AIzaSyCasjmHpZp4CGcrI3Z2txMk0eOEy_NEypE"; // Replace with your Google Maps API key
-  const GEOLOCATION_API_KEY = "AIzaSyCasjmHpZp4CGcrI3Z2txMk0eOEy_NEypE"; // Replace with your Google Geolocation API key
+  const { user } = useUser();
 
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
 
   // Dummy Data: Multiple markers near the University of Calgary
@@ -17,7 +29,7 @@ const Home: React.FC = () => {
     },
     {
       id: 2,
-      position: { lat: 51.0790, lng: -114.1310 },
+      position: { lat: 51.079, lng: -114.131 },
       descriptions: ["Engineering Building", "Lecture Hall A", "Tech Labs"],
     },
     {
@@ -37,7 +49,7 @@ const Home: React.FC = () => {
     const fetchUserLocation = async () => {
       try {
         const response = await fetch(
-          `https://www.googleapis.com/geolocation/v1/geolocate?key=${GEOLOCATION_API_KEY}`,
+          `https://www.googleapis.com/geolocation/v1/geolocate?key=${API_KEY}`,
           {
             method: "POST",
             headers: {
@@ -55,6 +67,20 @@ const Home: React.FC = () => {
       }
     };
 
+    const addUserToDb = async () => {
+      await fetch(`${BASE_API_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: user?.id,
+          username: user?.fullName,
+        }),
+      });
+    };
+
+    addUserToDb();
     fetchUserLocation();
   }, []);
 
@@ -74,24 +100,31 @@ const Home: React.FC = () => {
                 position={marker.position}
                 onClick={() => setSelectedMarker(marker.id)}
               >
-                <Pin background="blue" borderColor="white" glyphColor="yellow" />
+                <Pin
+                  background="blue"
+                  borderColor="white"
+                  glyphColor="yellow"
+                />
               </AdvancedMarker>
             ))}
 
             {/* InfoWindow for selected markers */}
             {selectedMarker !== null && (
               <InfoWindow
-                position={markers.find((marker) => marker.id === selectedMarker)!.position}
+                position={
+                  markers.find((marker) => marker.id === selectedMarker)!
+                    .position
+                }
                 onCloseClick={() => setSelectedMarker(null)}
               >
                 <div>
                   <h4>Details:</h4>
                   <ul>
-                    {markers.find((marker) => marker.id === selectedMarker)!.descriptions.map(
-                      (desc, index) => (
+                    {markers
+                      .find((marker) => marker.id === selectedMarker)!
+                      .descriptions.map((desc, index) => (
                         <li key={index}>{desc}</li>
-                      )
-                    )}
+                      ))}
                   </ul>
                 </div>
               </InfoWindow>
