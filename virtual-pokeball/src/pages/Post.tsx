@@ -75,10 +75,10 @@ const PostPage: React.FC = () => {
     <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" }}>
       <Card style={{ width: '100%', maxWidth: '500px', color: "white" }} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
-          <h3 className="text-center mb-4">Create Post</h3>
+          <h3 className="text-center mb-4" style={{ color: 'black' }}>Create Post</h3>
           <Form>
             <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Take Photo</Form.Label>
+              <Form.Label style={{ color: '#555', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Take Photo</Form.Label>
               <div className="d-flex justify-content-center mb-3">
                 <video
                   ref={videoRef}
@@ -122,7 +122,7 @@ const PostPage: React.FC = () => {
             </Form.Group>
 
             <Form.Group controlId="formDescription" className="mb-3">
-              <Form.Label>Description</Form.Label>
+              <Form.Label style={{ color: '#555', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Description</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}

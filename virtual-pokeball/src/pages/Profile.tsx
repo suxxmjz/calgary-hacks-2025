@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
   return (
     <div  style={{ paddingBottom: "80px", backgroundColor: "#b0d4b2"  }}>
       <Container className="py-4">
-        <Card className="text-center p-3 mb-4 "  style={{border:'none',backgroundColor: "#b0d4b2"}}>
+        <Card className="text-center p-3 mb-2 "  style={{border:'none',backgroundColor: "#b0d4b2"}}>
           <Image
             src={user?.imageUrl || "😊"}
             roundedCircle
@@ -44,17 +44,17 @@ const Profile: React.FC = () => {
           <p className="text-muted">{user?.primaryEmailAddress?.emailAddress || "Email"}</p>
         </Card>
         <div className="d-flex justify-content-center">
-        <Button variant="danger" onClick={handleLogout} className="mb-4"
+        <Button variant="danger" onClick={handleLogout} className="mb-3"
            style={{
-            backgroundColor: 'rgb(31,200,25)',
-            borderColor: 'rgb(31,200,25)',
+            backgroundColor: '#53b559',
+            borderColor: '#53b559',
             color: 'white'
           }}
          >
           Log Out
         </Button>
         </div>
-        <h5 className="mb-3">Recent Posts</h5>
+        <h5 className="mb-2" style={{  fontSize: "1.5rem", color: "#2e4d36",letterSpacing: "0.75px",fontFamily: "Poppins, sans-serif",}}>Recent Posts</h5>
         <Row>
           {dummyPosts.map((post, index) => (
             <Col md={6} key={index} className="mb-3">
