@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, Wallet, Plus, Settings, User } from "lucide-react";
+import { Home, Plus, User } from "lucide-react";
 import { Nav, Button } from "react-bootstrap";
 
 const BottomNav: React.FC = () => {
@@ -14,13 +14,6 @@ const BottomNav: React.FC = () => {
           <span className="sr-only"></span>
         </Nav.Link>
       </Nav.Item>
-
-      {/* <Nav.Item>
-        <Nav.Link as={NavLink} to="/wallet" className="text-center">
-          <Wallet size={24} className="text-gray-500" />
-          <span className="sr-only"></span>
-        </Nav.Link>
-      </Nav.Item> */}
 
       <Nav.Item>
         <Nav.Link as={NavLink} to="/post" className="p-0">
