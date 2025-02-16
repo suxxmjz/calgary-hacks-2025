@@ -12,8 +12,31 @@ const PostPage: React.FC = () => {
     longitude: null,
   });
   const [timestamp, setTimestamp] = useState<string>('');
+  const [isFrontCamera, setIsFrontCamera] = useState<boolean>(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  const initCamera = async (facingMode: 'user' | 'environment') => {
+    try {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: facingMode,
+        }
+      });
+
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error('Error accessing camera: ', err);
+    }
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -28,22 +51,22 @@ const PostPage: React.FC = () => {
     const formattedTimestamp = new Date().toISOString();
     setTimestamp(formattedTimestamp);
 
-    if (videoRef.current) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        })
-        .catch((err) => {
-          console.error('Error accessing camera: ', err);
-        });
-    }
+    initCamera('user');
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
   }, []);
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNotes(e.target.value);
+  };
+
+  const toggleCamera = () => {
+    setIsFrontCamera(!isFrontCamera);
+    initCamera(isFrontCamera ? 'environment' : 'user');
   };
 
   const handleCapture = () => {
@@ -67,26 +90,40 @@ const PostPage: React.FC = () => {
       longitude: location.longitude,
     };
     console.log(postData);
-
-    // Fetch API code would go here
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" ,border: "none"}}>
-      <Card style={{ width: '100%', maxWidth: '500px', color: "white" ,border: "none"}} className="d-flex flex-column">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px", border: "none" }}>
+      <Card style={{ width: '100%', maxWidth: '500px', color: "white", border: "none" }} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4" style={{ color: 'black' }}>Create Post</h3>
           <Form>
             <Form.Group controlId="formFile" className="mb-2">
-              
-              <div className="d-flex justify-content-center mb-2">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  width="100%"
-                  height="auto"
-                  style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}
-                ></video>
+              <div className="position-relative">
+                <div className="d-flex justify-content-center mb-2">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    width="100%"
+                    height="auto"
+                    style={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+                  ></video>
+                  <Button
+                    variant="light"
+                    onClick={toggleCamera}
+                    className="position-absolute"
+                    style={{
+                      top: '10px',
+                      right: '10px',
+                      borderRadius: '50%',
+                      padding: '8px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    }}
+                  >
+                    ↺
+                  </Button>
+                </div>
               </div>
               <Button
                 variant="secondary"
@@ -112,7 +149,7 @@ const PostPage: React.FC = () => {
                     fluid
                     style={{
                       maxWidth: '100%',
-                      height: 'auto',
+                      height: '100%',
                       borderRadius: '10px',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                     }}
@@ -132,7 +169,6 @@ const PostPage: React.FC = () => {
                 style={{
                   borderRadius: '10px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  
                 }}
               />
             </Form.Group>
@@ -146,7 +182,7 @@ const PostPage: React.FC = () => {
                 style={{
                   borderRadius: '8px',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  backgroundColor: '#f0f0f0', 
+                  backgroundColor: '#f0f0f0',
                   cursor: 'not-allowed',
                 }}
               />
@@ -164,7 +200,7 @@ const PostPage: React.FC = () => {
               />
             </InputGroup>
 
-            <Form.Label   className="field-label">Timestamp:</Form.Label>
+            <Form.Label className="field-label">Timestamp:</Form.Label>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Time Taken"
@@ -174,8 +210,7 @@ const PostPage: React.FC = () => {
                   width: 'auto',
                   height: '40px',
                   borderRadius: '10px',
-                
-                  backgroundColor:'#f0f0f0',
+                  backgroundColor: '#f0f0f0',
                   cursor: 'not-allowed',
                   padding: '5px',
                 }}
@@ -186,15 +221,17 @@ const PostPage: React.FC = () => {
             variant="primary"
             className="w-100 btn-sm fw-bold mt-3"
             onClick={handleSubmit}
+            disabled={!encodedImage}
             style={{
               borderRadius: '10px',
               fontSize: '16px',
               fontWeight: 'bold',
-              padding: '10px 15px' ,
-              backgroundColor: '#53b559', 
-              borderColor: '#53b559', 
+              padding: '10px 15px',
+              backgroundColor: '#53b559',
+              borderColor: '#53b559',
               marginTop: '20px',
               width: 'auto',
+              opacity: encodedImage ? 1 : 0.6,
             }}
           >
             Submit Post
