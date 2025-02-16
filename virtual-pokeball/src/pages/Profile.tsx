@@ -2,6 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { Card, Button, Container, Row, Col, Image } from "react-bootstrap";
+import { format } from 'date-fns';
+import { FaArrowUp } from 'react-icons/fa';
 
 interface Post {
   id: number;
@@ -16,12 +18,6 @@ interface Post {
   upvotes: number;
 }
 
-
-// const dummyPosts: Post[] = Array.from({ length: 5 }, (_, index) => ({
-//   title: `Post ${index + 1}`,
-//   description: `This is a dynamically generated post ${index + 1}.`,
-//   time: `${index * 10 + 5}m ago`,
-// }));
 
 const Profile: React.FC = () => {
   const { user } = useUser();
@@ -72,6 +68,7 @@ const Profile: React.FC = () => {
     signOut();
   };
   return (
+    <div  style={{ paddingBottom: "80px", backgroundColor: "#b0d4b2"  }}>
     <Container className="py-4">
       <Card className="text-center p-3 mb-4 shadow-sm">
         <Image

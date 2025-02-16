@@ -12,9 +12,9 @@ function App() {
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
 
-  // If not signed in, show login page instead of app content
   if (!isSignedIn) {
-    return <LoginPage />;
+    return <RedirectToSignIn />;
+    
   }
 
   return (
