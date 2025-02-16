@@ -26,17 +26,20 @@ WildDex transforms wildlife encounters into memorable experiences while contribu
 ### Setup
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/suxxmjz/calgary-hacks-2025
 ```
 
 2. Install dependencies in both client and server directories
+
 ```bash
-cd virtual-pokeball && npm install
+cd client && npm install
 cd ../server && npm install
 ```
 
 3. Start the application
+
 ```bash
 docker compose up --build
 ```
@@ -90,4 +93,4 @@ Integrated Google Maps API enables precise geo-tagging of wildlife encounters, c
 
 ---
 
-*WildDex: Turning wildlife encounters into conservation data, one capture at a time.*
+_WildDex: Turning wildlife encounters into conservation data, one capture at a time._
