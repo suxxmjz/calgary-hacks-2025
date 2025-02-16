@@ -63,7 +63,6 @@ const Home: React.FC = () => {
       <APIProvider apiKey={API_KEY}>
         <div style={{ height: "100vh", width: "100%" }}>
           <Map
-            center={userLocation || { lat: 51.0785, lng: -114.1306 }} // Center on user if available
             gestureHandling="greedy" // Allows full user control
             disableDefaultUI={false} // Ensure default UI elements are enabled
             mapId="e21db703daeafd54"
