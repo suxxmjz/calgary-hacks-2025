@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { dbClient } from "../db/db";
+import { dbClient } from "../index";
 import { postsTable, upvotesTable } from "../db/schema";
 import { CreatePostInsert, Post } from "../types";
 

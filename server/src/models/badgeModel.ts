@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { dbClient } from "../db/db";
+import { dbClient } from "../index";
 import { AssignBadgeInsert, Badge } from "../types";
 import { badgesTable } from "../db/schema";
 

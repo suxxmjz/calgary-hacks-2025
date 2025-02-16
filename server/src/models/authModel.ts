@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { dbClient } from "../db/db";
 import { usersTable } from "../db/schema";
 import { User } from "../types";
+import { dbClient } from "../index";
 
 export async function addUserAccount(
   id: string,
