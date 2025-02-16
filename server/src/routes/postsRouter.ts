@@ -18,6 +18,7 @@ import { supabase } from "../supabase/supabase";
 
 const SUPABASE_IMAGE_BUCKET = "wilddex-images";
 const BASE_64_IMAGE_REGEX = /^data:(.+);base64,(.*)$/;
+const PREDICTION_API_URL = `${process.env.PREDICTION_API_URL}/get-prediction`;
 
 export const postsRouter = Router();
 
@@ -118,11 +119,31 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
   const uniqueImageName = `${Date.now()}_${randomUUID()}`;
 
   // Classify the animal in the image make a call to the Flask API
+  const classificationResponse = await fetch(PREDICTION_API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      image: base64EncodedImageData,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!classificationResponse.ok) {
+    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
+      getFormattedApiResponse({
+        message: "Error classifying image",
+        code: HTTP_CODES.INTERNAL_SERVER_ERROR,
+      })
+    );
+    return;
+  }
+
+  const classificationJSON = await classificationResponse.json();
+  const classification = classificationJSON.result as string;
 
   // Make OpenAI API call to generate conservation notes
 
   // Save the image to cloud storage
-
   const filePath = `uploads/${uniqueImageName}`;
   const { data: uploadedImage, error: imageUploadError } =
     await supabase.storage
@@ -140,13 +161,17 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
     return;
   }
 
+  const { data } = supabase.storage
+    .from(SUPABASE_IMAGE_BUCKET)
+    .getPublicUrl(filePath);
+
   // Save the post to the database
   const dbInsert: CreatePostInsert = {
     userId,
-    animal: "Cow", // TODO: Placeholder for now,
+    animal: classification,
     notes: notes ?? null,
     conservationNotes: "Placeholder conservation notes", // TODO: Placeholder for now,
-    imageUrl: uploadedImage.fullPath,
+    imageUrl: data.publicUrl,
     latitude,
     longitude,
   };
