@@ -1,11 +1,20 @@
 import dotenv from "dotenv";
 import express from "express";
 import { router } from "./routes/router";
+import cors from "cors";
 import { getFormattedApiResponse, HTTP_CODES } from "./utils/constants";
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN ?? "",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

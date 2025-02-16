@@ -31,11 +31,15 @@ postsRouter.get("/", async (_req, res) => {
     return;
   }
 
+  const sortedPostsTimeDesc = [...posts].sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  );
+
   res.status(HTTP_CODES.OK).json(
     getFormattedApiResponse({
       message: "Posts fetched successfully",
       code: HTTP_CODES.OK,
-      data: posts,
+      data: sortedPostsTimeDesc,
     })
   );
 });
