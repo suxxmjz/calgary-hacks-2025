@@ -79,7 +79,7 @@ const PostPage: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px" }}>
       <Card style={{ width: '100%', maxWidth: '500px' }} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4">Create Post</h3>
@@ -196,4 +196,3 @@ const PostPage: React.FC = () => {
 };
 
 export default PostPage;
-// the submit button is stuck
