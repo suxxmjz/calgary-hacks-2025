@@ -29,12 +29,10 @@ const Profile: React.FC = () => {
   const handleLogout = () => {
     signOut();
   };
-
-
   return (
-    <div  style={{ paddingBottom: "80px" }}>
+    <div  style={{ paddingBottom: "80px", backgroundColor: "#b0d4b2"  }}>
       <Container className="py-4">
-        <Card className="text-center p-3 mb-4 shadow-sm">
+        <Card className="text-center p-3 mb-4 "  style={{border:'none',backgroundColor: "#b0d4b2"}}>
           <Image
             src={user?.imageUrl || "😊"}
             roundedCircle
@@ -45,10 +43,17 @@ const Profile: React.FC = () => {
           <h4>{user?.fullName || user?.username || "Username"}</h4>
           <p className="text-muted">{user?.primaryEmailAddress?.emailAddress || "Email"}</p>
         </Card>
-        <Button variant="danger" onClick={handleLogout} className="mb-4">
+        <div className="d-flex justify-content-center">
+        <Button variant="danger" onClick={handleLogout} className="mb-4"
+           style={{
+            backgroundColor: 'rgb(31,200,25)',
+            borderColor: 'rgb(31,200,25)',
+            color: 'white'
+          }}
+         >
           Log Out
         </Button>
-
+        </div>
         <h5 className="mb-3">Recent Posts</h5>
         <Row>
           {dummyPosts.map((post, index) => (
