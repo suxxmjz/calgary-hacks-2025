@@ -77,9 +77,9 @@ const PostPage: React.FC = () => {
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4" style={{ color: 'black' }}>Create Post</h3>
           <Form>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label style={{ color: '#555', fontWeight: '500', fontFamily: 'Poppins, sans-serif' }}>Take Photo</Form.Label>
-              <div className="d-flex justify-content-center mb-3">
+            <Form.Group controlId="formFile" className="mb-2">
+              
+              <div className="d-flex justify-content-center mb-2">
                 <video
                   ref={videoRef}
                   autoPlay
