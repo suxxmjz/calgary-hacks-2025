@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { useUser, RedirectToSignIn } from "@clerk/clerk-react";
 import Home from "./pages/HomePage";
 import Profile from "./pages/ProfilePage";
 import Post from "./pages/CreatePostPage";
@@ -17,12 +16,6 @@ import LoginPage from "./pages/LoginPage";
 export const BASE_API_URL = `${import.meta.env.VITE_BACKEND_API_URL}/api`;
 
 function App() {
-  const { isSignedIn } = useUser();
-
-  if (!isSignedIn) {
-    return <RedirectToSignIn />;
-  }
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-grow overflow-auto">
