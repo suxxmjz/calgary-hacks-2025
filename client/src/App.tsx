@@ -1,9 +1,8 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useUser, RedirectToSignIn } from "@clerk/clerk-react";
-import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import Post from "./pages/Post";
+import Home from "./pages/HomePage";
+import Profile from "./pages/ProfilePage";
+import Post from "./pages/CreatePostPage";
 import BottomNav from "./components/BottomNav";
 import CommunityPage from "./pages/CommunityPage";
 import {
