@@ -22,8 +22,8 @@ const handleLogout = () => {
     signOut();
   };
   return (
-    <Container className="py-4">
-      <Card className="text-center p-3 mb-4 shadow-sm">
+    <Container className="py-4" style={{ backgroundColor:"#9fc99f",padding:'20px', borderRadius:'10px' }} >
+      <Card className="text-center p-3 mb-4 shadow-sm "  >
         <Image
           src={user?.imageUrl || "😊"}
           roundedCircle

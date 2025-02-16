@@ -72,8 +72,8 @@ const PostPage: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px",backgroundColor: "#b0d4b2" }}>
-      <Card style={{ width: '100%', maxWidth: '500px', backgroundColor: "#2e7d32", color: "white" }} className="d-flex flex-column">
+    <div className="d-flex justify-content-center align-items-center min-vh-100 px-3" style={{ paddingBottom: "80px",backgroundColor: "white" }}>
+      <Card style={{ width: '100%', maxWidth: '500px' }} className="d-flex flex-column">
         <Card.Body className="flex-grow-1" style={{ overflowY: 'auto' }}>
           <h3 className="text-center mb-4">Create Post</h3>
           <Form>
@@ -137,7 +137,7 @@ const PostPage: React.FC = () => {
               />
             </Form.Group>
 
-            <Form.Label className="field-label" style={{ color: "white" }}>Latitude & Longitude :</Form.Label>
+            <Form.Label className="field-label" style={{ color: "Black" }}>Latitude & Longitude :</Form.Label>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Latitude"
@@ -148,7 +148,7 @@ const PostPage: React.FC = () => {
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                   backgroundColor: '#c5c6c7', 
                   cursor: 'not-allowed',
-                  paddingRight:'-0px',
+                  paddingRight:'-100px',
                 }}
               />
               <FormControl
@@ -164,7 +164,7 @@ const PostPage: React.FC = () => {
               />
             </InputGroup>
 
-            <Form.Label   className="field-label" style={{ fontFamily: 'sans-serif', color: 'white' }}>Timestamp :</Form.Label>
+            <Form.Label   className="field-label" style={{ fontFamily: 'sans-serif', color: 'Black' }}>Timestamp :</Form.Label>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Time Taken"
