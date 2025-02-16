@@ -15,18 +15,21 @@ async function seedDatabase() {
 
   await dbClient.insert(badgesTable).values([
     {
+      id: 1,
       userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
       title: "Wildlife Explorer",
       description: "Awarded for spotting 10 different animals",
       imageUrl: "https://picsum.photos/200",
     },
     {
+      id: 2,
       userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
       title: "Wildlife Explorer 2",
       description: "Awarded for spotting 20 different animals",
       imageUrl: "https://picsum.photos/200",
     },
     {
+      id: 3,
       userId: "user_2",
       title: "Nature Protector",
       description: "Awarded for reporting conservation issues",

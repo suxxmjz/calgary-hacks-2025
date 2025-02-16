@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { dbClient } from "../index";
 import { AssignBadgeInsert, Badge } from "../types";
 import { badgesTable } from "../db/schema";
@@ -27,5 +27,23 @@ export async function assignBadgeToUser(
   } catch (error) {
     console.error(`Error assigning badge to user: ${JSON.stringify(error)}`);
     return false;
+  }
+}
+
+export async function doesUserHaveBadge(
+  bagdeId: number,
+  userId: string
+): Promise<boolean | undefined> {
+  try {
+    const badge = await dbClient.query.badgesTable.findFirst({
+      where: and(eq(badgesTable.id, bagdeId), eq(badgesTable.userId, userId)),
+    });
+
+    return badge !== undefined;
+  } catch (error) {
+    console.error(
+      `Error fetching badge from database: ${JSON.stringify(error)}`
+    );
+    return undefined;
   }
 }

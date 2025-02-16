@@ -3,8 +3,10 @@ import {
   doublePrecision,
   integer,
   pgTable,
+  primaryKey,
   text,
   timestamp,
+  unique,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -40,24 +42,33 @@ export const postsTable = pgTable("posts", {
     .notNull(),
 });
 
-export const badgesTable = pgTable("badges", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: varchar("user_id")
-    .notNull()
-    .references(() => usersTable.id, {
-      onDelete: "cascade",
-      onUpdate: "no action",
+export const badgesTable = pgTable(
+  "badges",
+  {
+    id: integer().notNull(),
+    userId: varchar("user_id")
+      .notNull()
+      .references(() => usersTable.id, {
+        onDelete: "cascade",
+        onUpdate: "no action",
+      }),
+    title: varchar({ length: 255 }).notNull(),
+    description: varchar().notNull(),
+    imageUrl: varchar("image_url").notNull(),
+    dateEarned: timestamp("date_earned", {
+      withTimezone: true,
+      mode: "date",
+    })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    primaryKey({
+      name: "unique_id_userId_badge_pk",
+      columns: [table.id, table.userId],
     }),
-  title: varchar({ length: 255 }).notNull(),
-  description: varchar().notNull(),
-  imageUrl: varchar("image_url").notNull(),
-  dateEarned: timestamp("date_earned", {
-    withTimezone: true,
-    mode: "date",
-  })
-    .defaultNow()
-    .notNull(),
-});
+  ]
+);
 
 export const upvotesTable = pgTable("upvotes", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
