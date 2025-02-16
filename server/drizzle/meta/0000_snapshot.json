@@ -1,5 +1,5 @@
 {
-  "id": "b12d312d-98d3-4147-83ea-2afbe4212f33",
+  "id": "0281b210-c629-43e4-9530-bedca8503f4d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -120,7 +120,7 @@
         },
         "conservation_notes": {
           "name": "conservation_notes",
-          "type": "varchar",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

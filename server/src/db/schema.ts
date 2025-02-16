@@ -3,6 +3,7 @@ import {
   doublePrecision,
   integer,
   pgTable,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -27,7 +28,7 @@ export const postsTable = pgTable("posts", {
     }),
   animal: varchar({ length: 255 }).notNull(),
   notes: varchar(),
-  conservationNotes: varchar("conservation_notes").notNull(),
+  conservationNotes: text("conservation_notes").notNull(),
   imageUrl: varchar("image_url").notNull(),
   latitude: doublePrecision().notNull(),
   longitude: doublePrecision().notNull(),

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, Plus, User } from "lucide-react";
+import { Home, Plus, User , Newspaper} from "lucide-react";
 import { Nav, Button } from "react-bootstrap";
 
 const BottomNav: React.FC = () => {
@@ -33,6 +33,13 @@ const BottomNav: React.FC = () => {
           <User size={24} className="text-gray-500" />
           <span className="sr-only"></span>
         </Nav.Link>
+      </Nav.Item>
+        <Nav.Link as={NavLink} to="/communityposts" className="text-center">
+            <Newspaper size={24} className="text-gray-500" />
+            <span className="sr-only"></span>
+        </Nav.Link>
+      <Nav.Item>
+
       </Nav.Item>
     </Nav>
   );
