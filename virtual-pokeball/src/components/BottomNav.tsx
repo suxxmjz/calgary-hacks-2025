@@ -9,7 +9,7 @@ const BottomNav: React.FC = () => {
       className="fixed-bottom w-100 bg-white border-top d-flex justify-content-around align-items-center py-2 shadow-lg z-10"
     >
       <Nav.Item>
-        <Nav.Link as={NavLink} to="/home" className="text-center">
+        <Nav.Link as={NavLink} to="/" className="text-center">
           <Home size={24} className="text-gray-500" />
           <span className="sr-only"></span>
         </Nav.Link>

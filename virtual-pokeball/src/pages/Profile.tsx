@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { Card, Button, Container, Row, Col, Image } from "react-bootstrap";
 
 interface Post {
@@ -16,7 +16,11 @@ const dummyPosts: Post[] = Array.from({ length: 5 }, (_, index) => ({
 
 const Profile: React.FC = () => {
   const { user } = useUser();
+  const { signOut } = useClerk();
 
+const handleLogout = () => {
+    signOut();
+  };
   return (
     <Container className="py-4">
       <Card className="text-center p-3 mb-4 shadow-sm">
@@ -30,6 +34,9 @@ const Profile: React.FC = () => {
         <h4>{user?.fullName || "Username"}</h4>
         <p className="text-muted">{user?.primaryEmailAddress?.emailAddress || "Email"}</p>
       </Card>
+      <Button variant="danger" onClick={handleLogout} className="mb-4">
+        Log Out
+      </Button>
 
       <h5 className="mb-3">Recent Posts</h5>
       <Row>
