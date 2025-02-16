@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile
     image: wilddex-prediction-api
     ports:
-      - "6000:6000"
+      - "8080:8080"
     networks:
       - wilddex-network
 
