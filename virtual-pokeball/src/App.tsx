@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Post from "./pages/Post";
 import BottomNav from "./components/BottomNav";
 import LoginPage from "./pages/LoginPage"; // Import custom login page
+import CommunityPage from "./pages/CommunityPage";
 
 function App() {
   const { isSignedIn } = useUser();
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post" element={<Post />} />
+          <Route path="/communityposts" element={<CommunityPage />} />
         </Routes>
       </div>
       <BottomNav />
