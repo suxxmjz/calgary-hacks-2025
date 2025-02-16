@@ -3,3 +3,6 @@ matplotlib
 scikit-learn
 numpy
 optuna
+Flask
+gunicorn
+opencv-python

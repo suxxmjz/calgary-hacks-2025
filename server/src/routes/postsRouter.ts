@@ -13,6 +13,11 @@ import {
   CreatePostRequestBody,
   UpvotePostRequestBody,
 } from "../types";
+import { randomUUID } from "crypto";
+import { supabase } from "../supabase/supabase";
+
+const SUPABASE_IMAGE_BUCKET = "wilddex-images";
+const BASE_64_IMAGE_REGEX = /^data:(.+);base64,(.*)$/;
 
 export const postsRouter = Router();
 
@@ -31,18 +36,22 @@ postsRouter.get("/", async (_req, res) => {
     return;
   }
 
+  const sortedPostsTimeDesc = [...posts].sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  );
+
   res.status(HTTP_CODES.OK).json(
     getFormattedApiResponse({
       message: "Posts fetched successfully",
       code: HTTP_CODES.OK,
-      data: posts,
+      data: sortedPostsTimeDesc,
     })
   );
 });
 
 // GET endpoint to fetch all posts for a user by user ID
 postsRouter.get("/:userId", async (req, res) => {
-  const userId = req.query.userId;
+  const userId = req.params.userId;
   if (!userId) {
     res.status(HTTP_CODES.BAD_REQUEST).json(
       getFormattedApiResponse({
@@ -55,7 +64,6 @@ postsRouter.get("/:userId", async (req, res) => {
 
   const sanitizedUserId = userId as string;
   const posts = await getPostsByUserId(sanitizedUserId);
-
   if (!posts) {
     res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
       getFormattedApiResponse({
@@ -93,11 +101,44 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
 
   // Decode the image
 
-  // Classify the animal in the image
+  const imageRegexMatch = encodedImage.match(BASE_64_IMAGE_REGEX);
+  if (!imageRegexMatch) {
+    res.status(HTTP_CODES.BAD_REQUEST).json(
+      getFormattedApiResponse({
+        message: "Invalid image encoding",
+        code: HTTP_CODES.BAD_REQUEST,
+      })
+    );
+    return;
+  }
+
+  const mimeType = imageRegexMatch[1];
+  const base64EncodedImageData = imageRegexMatch[2];
+  const imageBuffer = Buffer.from(base64EncodedImageData, "base64");
+  const uniqueImageName = `${Date.now()}_${randomUUID()}`;
+
+  // Classify the animal in the image make a call to the Flask API
 
   // Make OpenAI API call to generate conservation notes
 
   // Save the image to cloud storage
+
+  const filePath = `uploads/${uniqueImageName}`;
+  const { data: uploadedImage, error: imageUploadError } =
+    await supabase.storage
+      .from(SUPABASE_IMAGE_BUCKET)
+      .upload(filePath, imageBuffer, {
+        contentType: mimeType,
+      });
+  if (imageUploadError || !uploadedImage) {
+    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
+      getFormattedApiResponse({
+        message: "Error uploading image to cloud storage",
+        code: HTTP_CODES.INTERNAL_SERVER_ERROR,
+      })
+    );
+    return;
+  }
 
   // Save the post to the database
   const dbInsert: CreatePostInsert = {
@@ -105,7 +146,7 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
     animal: "Cow", // TODO: Placeholder for now,
     notes: notes ?? null,
     conservationNotes: "Placeholder conservation notes", // TODO: Placeholder for now,
-    imageUrl: "https://example.com/image.jpg", // TODO: Placeholder for now,
+    imageUrl: uploadedImage.fullPath,
     latitude,
     longitude,
   };

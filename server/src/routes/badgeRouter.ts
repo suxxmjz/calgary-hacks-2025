@@ -5,7 +5,7 @@ import { getBadgesByUserId } from "../models/badgeModel";
 export const badgeRouter = Router();
 
 badgeRouter.get("/:userId", async (req, res) => {
-  const userId = req.query.userId;
+  const userId = req.params.userId;
   if (!userId) {
     res.status(HTTP_CODES.BAD_REQUEST).json(
       getFormattedApiResponse({

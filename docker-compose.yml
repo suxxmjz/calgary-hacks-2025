@@ -30,6 +30,16 @@ services:
     depends_on:
       - db
 
+  prediction-api:
+    build:
+      context: ./model
+      dockerfile: Dockerfile
+    image: wilddex-prediction-api
+    ports:
+      - "6000:6000"
+    networks:
+      - wilddex-network
+
   virtual-pokeball:
     build:
       context: ./virtual-pokeball
