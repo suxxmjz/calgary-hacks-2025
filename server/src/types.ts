@@ -31,3 +31,21 @@ export type CreatePostInsert = Omit<Post, "id" | "createdAt" | "upvotes">;
 export type UpvotePostRequestBody = TypedRequestBody<
   Pick<Post, "id"> & { operation: "increment" | "decrement"; userId: string }
 >;
+
+export interface Badge {
+  id: number;
+  userId: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  dateEarned: Date;
+}
+
+export type AssignBadgeInsert = Omit<Badge, "id" | "dateEarned">;
+
+export type RegisterRequestBody = TypedRequestBody<User>;
+
+export interface User {
+  id: string;
+  username: string;
+}
