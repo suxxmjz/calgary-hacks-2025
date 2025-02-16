@@ -5,15 +5,14 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Post from "./pages/Post";
 import BottomNav from "./components/BottomNav";
-import LoginPage from "./pages/LoginPage"; // Import custom login page
 
 function App() {
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
 
-  // If not signed in, show login page instead of app content
   if (!isSignedIn) {
-    return <LoginPage />;
+    return <RedirectToSignIn />;
+    
   }
 
   return (

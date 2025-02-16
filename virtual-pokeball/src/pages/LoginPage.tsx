@@ -43,7 +43,7 @@ const LoginPage: React.FC = () => {
           style={{
             width: "100%", 
             maxWidth: "300px", 
-            borderRadius: "8px", // For a cleaner look on mobile
+            borderRadius: "8px",
           }}
         >
           Sign In

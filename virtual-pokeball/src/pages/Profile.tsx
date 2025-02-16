@@ -31,7 +31,7 @@ const handleLogout = () => {
           width={100}
           height={100}
         />
-        <h4>{user?.fullName || "Username"}</h4>
+        <h4>{user?.fullName || user?.username || "Username"}</h4>
         <p className="text-muted">{user?.primaryEmailAddress?.emailAddress || "Email"}</p>
       </Card>
       <Button variant="danger" onClick={handleLogout} className="mb-4">
