@@ -10,7 +10,7 @@ import {
 import "../styles/post.css";
 import { useUser } from "@clerk/clerk-react";
 import { BASE_API_URL } from "../App";
-
+import {Post} from "../types/postTypes";
 const PostPage: React.FC = () => {
   const { user } = useUser();
   const [encodedImage, setEncodedImage] = useState<string | null>(null);

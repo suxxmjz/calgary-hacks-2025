@@ -1,31 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState} from "react";
 import "../styles/community-page.css";
-import { useState } from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { ImageListItem } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import IconButton from "@mui/material/IconButton";
 import ReactPullToRefresh from "react-pull-to-refresh";
 
-interface Post {
-  id: number;
-  userId: number;
-  animal: string;
-  notes: string;
-  conservationNotes: string;
-  imageUrl: string;
-  latitude: number;
-  longitude: number;
-  createdAt: string;
-  upvotes: number;
-}
+
+import { BASE_API_URL } from "../App"; 
+import {Post} from "../types/postTypes";
+import { useGetFetch } from "../hooks/useFetch";
+
+
+
 
 const CommunityPage: React.FC = () => {
-  const [posts, setPosts] = useState<Post[] | null>(null); // State can be an array or null initially
+  // const [posts, setPosts] = useState<Post[] | null>(null); // State can be an array or null initially
   const [upvoted, setUpvoted] = useState(false); // State to trigger re-fetch after upvote
 
-  const getPostURL = "http://localhost:4000/api/posts/";
-  const upvotesURL = "http://localhost:4000/api/posts/vote";
+  const getPostURL = `${BASE_API_URL}/posts/`;
+  const upvotesURL = `${BASE_API_URL}/posts/vote`;
+
+  const {data, error} = useGetFetch<Post[] >(getPostURL);
+
 
   useEffect(() => {
     console.log("Upvote");
@@ -88,21 +85,21 @@ const CommunityPage: React.FC = () => {
   // Ensure posts is not null before mapping
   return (
     <ReactPullToRefresh onRefresh={doNothing} className="community-page">
-      {posts ? (
-        posts.map((post) => (
-          <Card key={post.id} className="post-card">
+      {data ? (
+        data.map((data) => (
+          <Card key={data.id} className="post-card">
             <div className="post-header">
               <div className="post-username">
-                <Typography variant="h6">{post.userId}</Typography>
+                <Typography variant="h6">{data.userId}</Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {new Date(post.createdAt).toLocaleString()}
+                  {new Date(data.createdAt).toLocaleString()}
                 </Typography>
               </div>
             </div>
             <CardContent className="post-content">
               <ImageListItem>
                 <img
-                  src={post.imageUrl}
+                  src={data.imageUrl}
                   alt="Post image"
                   className="post-image"
                 />
@@ -112,15 +109,15 @@ const CommunityPage: React.FC = () => {
                 color="textPrimary"
                 className="post-description"
               >
-                {post.notes}
+                {data.notes}
               </Typography>
             </CardContent>
             <IconButton
               className="upvote-button"
-              onClick={() => doUpvote(post.id, post.userId)}
+              onClick={() => doUpvote(data.id, data.userId)}
             >
               <div className="upvote-count">
-                {post.upvotes} <ArrowUpwardIcon />
+                {data.upvotes} <ArrowUpwardIcon />
               </div>
             </IconButton>
           </Card>
