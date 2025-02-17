@@ -13,6 +13,7 @@ import {
 import { ProfilePage } from "./pages/ProfilePage";
 import { LoginPage } from "./pages/LoginPage";
 import { Layout } from "./pages/layout";
+import { RegisterPage } from "./pages/RegisterPage";
 
 export const BASE_API_URL = `${import.meta.env.VITE_BACKEND_API_URL}/api`;
 
@@ -20,7 +21,7 @@ function App() {
   return (
     <Routes>
       <Route path={LOGIN_ROUTE} element={<LoginPage />} />
-      <Route path={REGISTER_ROUTE} element={<>Register Page</>} />
+      <Route path={REGISTER_ROUTE} element={<RegisterPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
