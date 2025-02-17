@@ -15,7 +15,7 @@ export function Form({
   customClass,
 }: FormProps): JSX.Element {
   return (
-    <form className={`flex gap-2 ${customClass}`} onSubmit={onSubmit}>
+    <form className={`flex flex-col gap-2 ${customClass}`} onSubmit={onSubmit}>
       {header && <Header header={header.header} subtext={header.subtext} />}
       {children}
     </form>
