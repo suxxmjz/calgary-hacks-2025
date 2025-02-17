@@ -8,11 +8,9 @@ import {
   Image,
 } from "react-bootstrap";
 import "../styles/post.css";
-import { useUser } from "@clerk/clerk-react";
 import { BASE_API_URL } from "../App";
 
 const PostPage: React.FC = () => {
-  const { user } = useUser();
   const [encodedImage, setEncodedImage] = useState<string | null>(null);
   const [notes, setNotes] = useState<string>("");
   const [location, setLocation] = useState<{
@@ -99,7 +97,7 @@ const PostPage: React.FC = () => {
 
   async function handleSubmit(): Promise<void> {
     const postData = {
-      userId: user?.id,
+      userId: "testing",
       notes,
       encodedImage,
       timestamp,
