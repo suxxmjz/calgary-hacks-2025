@@ -51,7 +51,7 @@ export async function getPosts(): Promise<readonly Post[] | undefined> {
 }
 
 export async function getPostsByUserId(
-  userId: string
+  userId: number
 ): Promise<readonly Post[] | undefined> {
   try {
     const posts = await dbClient.query.postsTable.findMany({
@@ -106,7 +106,7 @@ export async function getPostUpvotes(
 export async function updatePostVotes(
   postId: number,
   operation: "increment" | "decrement",
-  userId: string
+  userId: number
 ): Promise<boolean> {
   try {
     if (operation === "increment") {
@@ -133,7 +133,7 @@ export async function updatePostVotes(
 
 export async function getUpvoteByPostIdAndUserId(
   postId: number,
-  userId: string
+  userId: number
 ): Promise<boolean | undefined> {
   try {
     const upvote = await dbClient.query.upvotesTable.findFirst({
@@ -153,7 +153,7 @@ export async function getUpvoteByPostIdAndUserId(
 }
 
 export async function getPostUpvotesByUserId(
-  userId: string
+  userId: number
 ): Promise<readonly number[] | undefined> {
   try {
     const upvotes = await dbClient.query.upvotesTable.findMany({

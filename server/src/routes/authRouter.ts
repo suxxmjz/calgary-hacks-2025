@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { RegisterRequestBody } from "../types";
 import { getFormattedApiResponse, HTTP_CODES } from "../utils/constants";
-import { addUserAccount, getUserById } from "../models/authModel";
+import {
+  addUserAccount,
+  getHashedPassword,
+  getUserByEmail,
+} from "../models/authModel";
 
 export const authRouter = Router();
 
 authRouter.post("/register", async (req: RegisterRequestBody, res) => {
-  const { id, username } = req.body;
-  if (!id || !username) {
+  const { email, name, password } = req.body;
+  if (!email || !name || !password) {
     res.status(HTTP_CODES.BAD_REQUEST).json(
       getFormattedApiResponse({
         message: "Missing required fields.",
@@ -17,7 +21,7 @@ authRouter.post("/register", async (req: RegisterRequestBody, res) => {
     return;
   }
 
-  const userExists = await getUserById(id);
+  const userExists = await getUserByEmail(email);
   if (userExists) {
     res.status(HTTP_CODES.BAD_REQUEST).json(
       getFormattedApiResponse({
@@ -28,7 +32,9 @@ authRouter.post("/register", async (req: RegisterRequestBody, res) => {
     return;
   }
 
-  const addSuccess = await addUserAccount(id, username);
+  const hashedPassword = await getHashedPassword(password);
+
+  const addSuccess = await addUserAccount(email, name, hashedPassword);
   if (!addSuccess) {
     res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
       getFormattedApiResponse({

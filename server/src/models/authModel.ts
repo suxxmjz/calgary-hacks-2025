@@ -2,15 +2,24 @@ import { eq } from "drizzle-orm";
 import { usersTable } from "../db/schema";
 import { User } from "../types";
 import { dbClient } from "../index";
+import * as bcryptjs from "bcryptjs";
+
+const SALT_ROUNDS = 10;
+
+export async function getHashedPassword(password: string): Promise<string> {
+  return await bcryptjs.hash(password, SALT_ROUNDS);
+}
 
 export async function addUserAccount(
-  id: string,
-  username: string
+  email: string,
+  name: string,
+  hashedPassword: string
 ): Promise<boolean> {
   try {
     const insert: typeof usersTable.$inferInsert = {
-      id,
-      username,
+      email,
+      name,
+      password: hashedPassword,
     };
 
     await dbClient.insert(usersTable).values(insert);
@@ -21,14 +30,31 @@ export async function addUserAccount(
   }
 }
 
-export async function getUserById(id: string): Promise<User | undefined> {
+export async function getUserById(id: number): Promise<User | undefined> {
   try {
     return await dbClient.query.usersTable.findFirst({
       where: eq(usersTable.id, id),
     });
   } catch (error) {
     console.error(
-      `Error fetching user from database: ${JSON.stringify(error)}`
+      `Error fetching user from database by id (${id}): ${JSON.stringify(
+        error
+      )}`
+    );
+    return undefined;
+  }
+}
+
+export async function getUserByEmail(email: string): Promise<User | undefined> {
+  try {
+    return await dbClient.query.usersTable.findFirst({
+      where: eq(usersTable.email, email),
+    });
+  } catch (error) {
+    console.error(
+      `Error fetching user from database by email (${email}): ${JSON.stringify(
+        error
+      )}`
     );
     return undefined;
   }
