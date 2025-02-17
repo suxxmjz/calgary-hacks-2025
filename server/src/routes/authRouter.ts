@@ -5,6 +5,7 @@ import {
   addUserAccount,
   doUserPasswordsMatch,
   getHashedPassword,
+  getSignedJwtToken,
   getUserByEmail,
 } from "../models/authModel";
 
@@ -77,7 +78,7 @@ authRouter.post("/login", async (req: LoginRequestBody, res) => {
     return;
   }
 
-  if (!doUserPasswordsMatch(user.id, password)) {
+  if (!(await doUserPasswordsMatch(user.id, password))) {
     res.status(HTTP_CODES.UNAUTHORIZED).json(
       getFormattedApiResponse({
         message: `Password is incorrect for email ${email}`,
@@ -92,4 +93,17 @@ authRouter.post("/login", async (req: LoginRequestBody, res) => {
     email: user.email,
     name: user.name,
   };
+
+  const token = getSignedJwtToken(safeUser);
+
+  res.status(HTTP_CODES.OK).json(
+    getFormattedApiResponse({
+      message: "User logged in successfully.",
+      data: {
+        token,
+        user: safeUser,
+      },
+      code: HTTP_CODES.OK,
+    })
+  );
 });

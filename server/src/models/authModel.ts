@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { eq } from "drizzle-orm";
 import { usersTable } from "../db/schema";
 import { User } from "../types";
@@ -5,6 +6,8 @@ import { dbClient } from "../index";
 import * as bcryptjs from "bcryptjs";
 
 const SALT_ROUNDS = 10;
+
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export async function getHashedPassword(password: string): Promise<string> {
   return await bcryptjs.hash(password, SALT_ROUNDS);
@@ -85,4 +88,10 @@ export async function doUserPasswordsMatch(
     );
     return false;
   }
+}
+
+export function getSignedJwtToken(user: User): string {
+  return jwt.sign(user, JWT_SECRET, {
+    expiresIn: "1d",
+  });
 }
