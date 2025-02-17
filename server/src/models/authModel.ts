@@ -59,3 +59,30 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
     return undefined;
   }
 }
+
+export async function doUserPasswordsMatch(
+  userId: number,
+  inputPassword: string
+): Promise<boolean> {
+  try {
+    const [row] = await dbClient
+      .select({
+        password: usersTable.password,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, userId));
+
+    if (!row) {
+      throw new Error(`User with id ${userId} not found`);
+    }
+
+    return await bcryptjs.compare(inputPassword, row.password);
+  } catch (error) {
+    console.error(
+      `Error fetching checking password for userId (${userId}): ${JSON.stringify(
+        error
+      )}`
+    );
+    return false;
+  }
+}

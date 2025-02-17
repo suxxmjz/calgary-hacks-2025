@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { RegisterRequestBody } from "../types";
+import { LoginRequestBody, RegisterRequestBody, User } from "../types";
 import { getFormattedApiResponse, HTTP_CODES } from "../utils/constants";
 import {
   addUserAccount,
+  doUserPasswordsMatch,
   getHashedPassword,
   getUserByEmail,
 } from "../models/authModel";
@@ -51,4 +52,44 @@ authRouter.post("/register", async (req: RegisterRequestBody, res) => {
       code: HTTP_CODES.OK,
     })
   );
+});
+
+authRouter.post("/login", async (req: LoginRequestBody, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(HTTP_CODES.BAD_REQUEST).json(
+      getFormattedApiResponse({
+        message: "Missing required fields.",
+        code: HTTP_CODES.BAD_REQUEST,
+      })
+    );
+    return;
+  }
+
+  const user = await getUserByEmail(email);
+  if (!user) {
+    res.status(HTTP_CODES.NOT_FOUND).json(
+      getFormattedApiResponse({
+        message: "User not found.",
+        code: HTTP_CODES.NOT_FOUND,
+      })
+    );
+    return;
+  }
+
+  if (!doUserPasswordsMatch(user.id, password)) {
+    res.status(HTTP_CODES.UNAUTHORIZED).json(
+      getFormattedApiResponse({
+        message: `Password is incorrect for email ${email}`,
+        code: HTTP_CODES.UNAUTHORIZED,
+      })
+    );
+    return;
+  }
+
+  const safeUser: User = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+  };
 });

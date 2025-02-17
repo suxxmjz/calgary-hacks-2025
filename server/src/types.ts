@@ -43,6 +43,11 @@ export interface Badge {
 
 export type AssignBadgeInsert = Omit<Badge, "dateEarned">;
 
+export type LoginRequestBody = TypedRequestBody<{
+  email: string;
+  password: string;
+}>;
+
 export type RegisterRequestBody = TypedRequestBody<
   Omit<User, "id"> & { password: string }
 >; // The register request has a password field as input
