@@ -15,7 +15,7 @@ export function RegisterPage(): JSX.Element {
           <div className="space-y-5 text-center">
             <div className="flex flex-col items-center justify-between text-center">
               <CustomImage
-                src="../../public/logo.png"
+                src="/logo.png"
                 alt="WildDex-Logo"
                 className="w-20 h-20"
               />
