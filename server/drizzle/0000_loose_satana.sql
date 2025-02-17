@@ -1,6 +1,6 @@
 CREATE TABLE "badges" (
 	"id" integer NOT NULL,
-	"user_id" varchar NOT NULL,
+	"user_id" integer NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar NOT NULL,
 	"image_url" varchar NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE "badges" (
 --> statement-breakpoint
 CREATE TABLE "posts" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "posts_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"user_id" varchar NOT NULL,
+	"user_id" integer NOT NULL,
 	"animal" varchar(255) NOT NULL,
 	"notes" varchar,
 	"conservation_notes" text NOT NULL,
@@ -23,13 +23,15 @@ CREATE TABLE "posts" (
 CREATE TABLE "upvotes" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "upvotes_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"post_id" integer NOT NULL,
-	"user_id" varchar NOT NULL
+	"user_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" varchar PRIMARY KEY NOT NULL,
-	"username" varchar NOT NULL,
-	CONSTRAINT "users_id_unique" UNIQUE("id")
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "users_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"name" varchar NOT NULL,
+	"email" varchar NOT NULL,
+	"password" varchar NOT NULL,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 ALTER TABLE "badges" ADD CONSTRAINT "badges_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
