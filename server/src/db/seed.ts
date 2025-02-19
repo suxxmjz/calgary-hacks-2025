@@ -7,30 +7,43 @@ const dbClient = createDbClient(process.env.DEV_DATABASE_URL ?? "");
 async function seedDatabase() {
   console.log("Seeding database...");
 
+  // Password hashes to "pass"
   await dbClient.insert(usersTable).values([
-    { id: "user_2t6nj9QU49a7YnOD41UAUbiXYRo", username: "Alice" },
-    { id: "user_2", username: "Bob" },
-    { id: "user_3", username: "Charlie" },
+    {
+      name: "Alice",
+      email: "alice@mail.com",
+      password: "$2b$10$aOs9LvrSspdABIJbhOUjN.b/F1OCUp6GZvFW2cACj89L8esTE6TN2",
+    },
+    {
+      name: "Bob Carter",
+      email: "bob@mail.com",
+      password: "$2b$10$aOs9LvrSspdABIJbhOUjN.b/F1OCUp6GZvFW2cACj89L8esTE6TN2",
+    },
+    {
+      name: "Jane Smith",
+      email: "Jane@mail.com",
+      password: "$2b$10$aOs9LvrSspdABIJbhOUjN.b/F1OCUp6GZvFW2cACj89L8esTE6TN2",
+    },
   ]);
 
   await dbClient.insert(badgesTable).values([
     {
       id: 1,
-      userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
+      userId: 1,
       title: "Wildlife Explorer",
       description: "Awarded for spotting 10 different animals",
       imageUrl: "https://picsum.photos/200",
     },
     {
       id: 2,
-      userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
+      userId: 2,
       title: "Wildlife Explorer 2",
       description: "Awarded for spotting 20 different animals",
       imageUrl: "https://picsum.photos/200",
     },
     {
       id: 3,
-      userId: "user_2",
+      userId: 3,
       title: "Nature Protector",
       description: "Awarded for reporting conservation issues",
       imageUrl: "https://picsum.photos/200",
@@ -39,7 +52,7 @@ async function seedDatabase() {
 
   await dbClient.insert(postsTable).values([
     {
-      userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
+      userId: 1,
       animal: "Lion",
       notes: "Saw a lion resting under a tree",
       conservationNotes: "Lions are facing habitat loss.",
@@ -48,7 +61,7 @@ async function seedDatabase() {
       longitude: 36.8219,
     },
     {
-      userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo",
+      userId: 2,
       animal: "Tiger",
       notes: "Look at this!",
       conservationNotes: "Rawr",
@@ -57,7 +70,7 @@ async function seedDatabase() {
       longitude: 38.89,
     },
     {
-      userId: "user_2",
+      userId: 3,
       animal: "Elephant",
       notes: "A group of elephants was walking",
       conservationNotes: "Poaching is a serious threat to elephants.",
@@ -68,9 +81,9 @@ async function seedDatabase() {
   ]);
 
   await dbClient.insert(upvotesTable).values([
-    { postId: 1, userId: "user_2" },
-    { postId: 2, userId: "user_2t6nj9QU49a7YnOD41UAUbiXYRo" },
-    { postId: 2, userId: "user_3" },
+    { postId: 1, userId: 1 },
+    { postId: 2, userId: 2 },
+    { postId: 2, userId: 3 },
   ]);
 
   console.log("Database seeded successfully!");
