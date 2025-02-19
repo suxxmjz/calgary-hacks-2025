@@ -5,7 +5,7 @@ import { User } from "@/types/userTypes";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_API_URL } from "@/App";
 import { LoginFormData } from "@/pages/LoginPage";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse } from "@/types/apiTypes";
 import { RegisterFormData } from "@/pages/RegisterPage";
 import { HOME_ROUTE, LOGIN_ROUTE } from "@/utils/routes";
 
@@ -26,7 +26,6 @@ interface AuthProviderProps {
   readonly children: React.ReactNode;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
@@ -123,7 +122,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     const localToken = localStorage.getItem(AUTH_TOKEN_KEY);
     if (!localToken) {
-      logout();
+      setIsAuthLoading(false);
       return;
     }
 
@@ -156,7 +155,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     return () => {
       clearInterval(refreshInterval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

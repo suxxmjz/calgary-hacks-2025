@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/HomePage";
+import { HomePage } from "./pages/HomePage";
 import Post from "./pages/CreatePostPage";
 import CommunityPage from "./pages/CommunityPage";
 import {
@@ -18,11 +18,15 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { AuthProvider } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const BASE_API_URL = `${
   import.meta.env.VITE_BACKEND_API_URL
 }/api` as const;
+
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY;
+
+export const GOOGLE_MAPS_API_BASE_URL = `https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`;
 
 const queryClient = new QueryClient();
 
@@ -30,21 +34,26 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Routes>
-          <Route path={LOGIN_ROUTE} element={<LoginPage />} />
-          <Route path={REGISTER_ROUTE} element={<RegisterPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route element={<Layout />}>
-              <Route path={HOME_ROUTE} element={<Home />} />
-              <Route path={PROFILE_ROUTE} element={<ProfilePage />} />
-              <Route path={CREATE_POST_ROUTE} element={<Post />} />
-              <Route path={COMMUNITY_POSTS_ROUTE} element={<CommunityPage />} />
+        <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
+          <Routes>
+            <Route path={LOGIN_ROUTE} element={<LoginPage />} />
+            <Route path={REGISTER_ROUTE} element={<RegisterPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path={HOME_ROUTE} element={<HomePage />} />
+                <Route path={PROFILE_ROUTE} element={<ProfilePage />} />
+                <Route path={CREATE_POST_ROUTE} element={<Post />} />
+                <Route
+                  path={COMMUNITY_POSTS_ROUTE}
+                  element={<CommunityPage />}
+                />
+              </Route>
             </Route>
-          </Route>
-          {/* Redirect invalid routes to landing page for non-authenticated users */}
-          <Route path="*" element={<Navigate to={HOME_ROUTE} replace />} />
-        </Routes>
-        <Toaster />
+            {/* Redirect invalid routes to landing page for non-authenticated users */}
+            <Route path="*" element={<Navigate to={HOME_ROUTE} replace />} />
+          </Routes>
+          <Toaster />
+        </APIProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
