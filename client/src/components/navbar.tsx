@@ -56,15 +56,24 @@ export function Navbar(): JSX.Element {
   ];
 
   return (
-    <nav className="flex items-center justify-between bg-slate-50">
-      <div className="flex items-center">
-        <CustomImage src="/logo.png" alt="WildDex-Logo" className="w-24 h-24" />
+    <nav className="flex items-center justify-between bg-slate-50 py-4">
+      <div className="flex items-center space-x-2">
+        <CustomImage
+          src="/croppedLogo.png"
+          alt="WildDex-Logo"
+          className="w-12 h-12"
+        />
         <h1 className="text-xl font-semibold text-header">WildDex</h1>
       </div>
       <ul className="flex items-center space-x-5">
         {NAV_ITEMS.map((item, idx) => {
           return <NavbarItem key={`navbar-item-${idx}`} {...item} />;
         })}
+        <CustomImage
+          src="https://avatar.iran.liara.run/public/12" // TODO: change this to user's avatar once supported by backend and DB
+          alt="user-avatar"
+          className="w-12 h-12 rounded-full shadow-md border-2 border-slate-300"
+        />
       </ul>
     </nav>
   );
