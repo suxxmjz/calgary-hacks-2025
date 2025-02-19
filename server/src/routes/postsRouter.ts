@@ -208,7 +208,7 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
     userId,
     animal: classification,
     notes: notes ?? null,
-    conservationNotes: openRouterResponseText,
+    conservationNotes: openRouterResponseText || "",
     imageUrl: data.publicUrl,
     latitude,
     longitude,
