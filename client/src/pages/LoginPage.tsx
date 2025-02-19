@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import { Container } from "@/components/container";
 import { Form } from "@/components/form";
 import { Input } from "@/components/ui/input";
@@ -6,12 +6,30 @@ import { Button } from "@/components/ui/button";
 import { CustomImage } from "@/components/customImage";
 import { Header } from "@/components/header";
 import { REGISTER_ROUTE } from "@/utils/routes";
+import { useAuth } from "@/hooks/useAuth";
+
+export interface LoginFormData {
+  readonly email: string;
+  readonly password: string;
+}
 
 export function LoginPage(): JSX.Element {
+  const { login } = useAuth();
+
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    await login(formData.email, formData.password);
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <Container>
-        <Form customClass="min-w-96" onSubmit={(e) => e.preventDefault()}>
+        <Form customClass="min-w-96" onSubmit={handleLogin}>
           <div className="space-y-5 text-center">
             <div className="flex flex-col items-center justify-between text-center">
               <CustomImage
@@ -28,12 +46,20 @@ export function LoginPage(): JSX.Element {
               placeholder="Enter your email address"
               type="email"
               label="Email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
             <Input
               placeholder="Enter your password"
               type="password"
               label="Password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               required
             />
             <Button className="w-full bg-foreground">Sign In</Button>
