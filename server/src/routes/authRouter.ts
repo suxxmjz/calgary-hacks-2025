@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { LoginRequestBody, RegisterRequestBody, User } from "../types";
+import {
+  LoginRequestBody,
+  RegisterRequestBody,
+  TypedRequestBody,
+  User,
+} from "../types";
 import { getFormattedApiResponse, HTTP_CODES } from "../utils/constants";
 import {
   addUserAccount,
@@ -7,6 +12,7 @@ import {
   getHashedPassword,
   getSignedJwtToken,
   getUserByEmail,
+  verifyToken,
 } from "../models/authModel";
 
 export const authRouter = Router();
@@ -107,3 +113,49 @@ authRouter.post("/login", async (req: LoginRequestBody, res) => {
     })
   );
 });
+
+authRouter.post(
+  "/refresh",
+  async (req: TypedRequestBody<{ refreshToken: string }>, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      res.status(HTTP_CODES.BAD_REQUEST).json(
+        getFormattedApiResponse({
+          message: "Missing required refreshToken.",
+          code: HTTP_CODES.BAD_REQUEST,
+        })
+      );
+      return;
+    }
+
+    const verifiedToken = verifyToken(refreshToken);
+    if (!verifiedToken) {
+      res.status(HTTP_CODES.UNAUTHORIZED).json(
+        getFormattedApiResponse({
+          message: "Invalid token.",
+          code: HTTP_CODES.UNAUTHORIZED,
+        })
+      );
+      return;
+    }
+
+    const safeUser: User = {
+      id: verifiedToken.id,
+      email: verifiedToken.email,
+      name: verifiedToken.name,
+    };
+
+    const newToken = getSignedJwtToken(safeUser);
+
+    res.status(HTTP_CODES.OK).json(
+      getFormattedApiResponse({
+        message: "Token refreshed successfully.",
+        data: {
+          token: newToken,
+          user: safeUser,
+        },
+        code: HTTP_CODES.OK,
+      })
+    );
+  }
+);

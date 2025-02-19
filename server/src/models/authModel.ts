@@ -95,3 +95,13 @@ export function getSignedJwtToken(user: User): string {
     expiresIn: "1d",
   });
 }
+
+export function verifyToken(token: string): User | undefined {
+  try {
+    const decodedToken: User = jwt.verify(token, JWT_SECRET) as User;
+    return decodedToken;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+}
