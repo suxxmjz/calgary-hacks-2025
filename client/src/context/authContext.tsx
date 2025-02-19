@@ -9,7 +9,7 @@ import { ApiResponse } from "@/types/api";
 import { RegisterFormData } from "@/pages/RegisterPage";
 import { HOME_ROUTE, LOGIN_ROUTE } from "@/utils/routes";
 
-const REFRESH_INTERVAL_MS = 1000; // 30 seconds
+const REFRESH_INTERVAL_MS = 60000 * 30; // 30 minutes
 
 export const AUTH_TOKEN_KEY = "auth_token";
 
