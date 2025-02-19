@@ -6,14 +6,10 @@ import {
   Pin,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
-import { useUser } from "@clerk/clerk-react";
-import { BASE_API_URL } from "../App";
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY; // Replace with your Google Maps API key
 
 const Home: React.FC = () => {
-  const { user } = useUser();
-
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -67,20 +63,6 @@ const Home: React.FC = () => {
       }
     };
 
-    const addUserToDb = async () => {
-      await fetch(`${BASE_API_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: user?.id,
-          username: user?.fullName,
-        }),
-      });
-    };
-
-    addUserToDb();
     fetchUserLocation();
   }, []);
 
