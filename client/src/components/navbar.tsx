@@ -3,12 +3,10 @@ import { CustomImage } from "./customImage";
 import { NavLink } from "react-router-dom";
 import {
   COMMUNITY_POSTS_ROUTE,
-  CREATE_POST_ROUTE,
   HOME_ROUTE,
   PROFILE_ROUTE,
 } from "@/utils/routes";
 import { IoHome, IoLogOut } from "react-icons/io5";
-import { IoIosAddCircle } from "react-icons/io";
 import { RiUserCommunityLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,11 +28,6 @@ const NAVBAR_ITEMS: readonly NavbarItemProps[] = [
     text: "Community",
     path: COMMUNITY_POSTS_ROUTE,
     icon: <RiUserCommunityLine />,
-  },
-  {
-    text: "Add Post",
-    path: CREATE_POST_ROUTE,
-    icon: <IoIosAddCircle />,
   },
   {
     text: "Profile",
@@ -72,7 +65,7 @@ export function Navbar(): JSX.Element {
         <CustomImage
           src="https://avatar.iran.liara.run/public/12" // TODO: change this to user's avatar once supported by backend and DB
           alt="user-avatar"
-          className="w-12 h-12 rounded-full shadow-md border-2 border-slate-300"
+          className="w-10 h-10 rounded-full shadow-md border-2 border-slate-300"
         />
       </ul>
     </nav>

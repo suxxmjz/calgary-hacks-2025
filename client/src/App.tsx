@@ -1,10 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import Post from "./pages/CreatePostPage";
 import CommunityPage from "./pages/CommunityPage";
 import {
   COMMUNITY_POSTS_ROUTE,
-  CREATE_POST_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PROFILE_ROUTE,
@@ -42,7 +40,6 @@ function App() {
               <Route element={<Layout />}>
                 <Route path={HOME_ROUTE} element={<HomePage />} />
                 <Route path={PROFILE_ROUTE} element={<ProfilePage />} />
-                <Route path={CREATE_POST_ROUTE} element={<Post />} />
                 <Route
                   path={COMMUNITY_POSTS_ROUTE}
                   element={<CommunityPage />}
