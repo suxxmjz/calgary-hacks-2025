@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CustomImage } from "@/components/customImage";
 import { Header } from "@/components/header";
-import { REGISTER_ROUTE } from "@/utils/routes";
+import { HOME_ROUTE, REGISTER_ROUTE } from "@/utils/routes";
 import { useAuth } from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 export interface LoginFormData {
   readonly email: string;
@@ -14,7 +15,7 @@ export interface LoginFormData {
 }
 
 export function LoginPage(): JSX.Element {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -24,6 +25,11 @@ export function LoginPage(): JSX.Element {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     await login(formData.email, formData.password);
+  }
+
+  // Prevent logged in users from accessing the login page
+  if (user) {
+    return <Navigate to={HOME_ROUTE} />;
   }
 
   return (

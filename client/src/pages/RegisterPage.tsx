@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CustomImage } from "@/components/customImage";
 import { Header } from "@/components/header";
-import { LOGIN_ROUTE } from "@/utils/routes";
+import { HOME_ROUTE, LOGIN_ROUTE } from "@/utils/routes";
 import { useAuth } from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 export interface RegisterFormData {
   readonly name: string;
@@ -15,7 +16,7 @@ export interface RegisterFormData {
 }
 
 export function RegisterPage(): JSX.Element {
-  const { register } = useAuth();
+  const { register, user } = useAuth();
 
   const [formData, setFormData] = useState<RegisterFormData>({
     name: "",
@@ -26,6 +27,11 @@ export function RegisterPage(): JSX.Element {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     await register(formData);
+  }
+
+  // Prevent logged in users from accessing the register page
+  if (user) {
+    return <Navigate to={HOME_ROUTE} />;
   }
 
   return (
