@@ -7,7 +7,7 @@ import { BASE_API_URL } from "@/App";
 import { LoginFormData } from "@/pages/LoginPage";
 import { ApiResponse } from "@/types/api";
 import { RegisterFormData } from "@/pages/RegisterPage";
-import { LOGIN_ROUTE } from "@/utils/routes";
+import { HOME_ROUTE, LOGIN_ROUTE } from "@/utils/routes";
 
 const REFRESH_INTERVAL_MS = 1000; // 30 seconds
 
@@ -61,8 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         title: "Welcome back!",
         description: "Successfully logged in.",
       });
-
-      // TODO: navigate to home page
+      navigate(HOME_ROUTE);
     },
     onError: (errorResponse) => {
       toast({
