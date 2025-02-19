@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export function Layout(): JSX.Element {
   return (
-    <div className="h-full bg-zinc-50 px-10">
+    <div className="h-full bg-slate-50 px-10">
       <Navbar />
       <Outlet />
       <Footer />
