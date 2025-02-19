@@ -10,6 +10,7 @@ import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { IoIosAddCircle } from "react-icons/io";
 import { useAuth } from "@/hooks/useAuth";
+import { useAddSighting } from "@/hooks/useAddSighting";
 
 const MAX_NOTES_LENGTH_CHARS = 250;
 
@@ -18,7 +19,7 @@ interface AddSightingModalProps {
   readonly onClose: () => void;
 }
 
-interface AddPostFormData {
+export interface AddSightingFormData {
   readonly encodedImage: string | null;
   readonly notes: string | null;
   readonly location: LatitudeLongitude | null;
@@ -31,7 +32,13 @@ export function AddSightingModal({
 }: AddSightingModalProps): JSX.Element {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [formData, setFormData] = useState<AddPostFormData>(
+  const {
+    addSighting,
+    loading: addSightingLoading,
+    error: addSightingError,
+  } = useAddSighting();
+
+  const [formData, setFormData] = useState<AddSightingFormData>(
     getDefaultFormData()
   );
 
@@ -41,7 +48,7 @@ export function AddSightingModal({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  function getDefaultFormData(): AddPostFormData {
+  function getDefaultFormData(): AddSightingFormData {
     return {
       encodedImage: null,
       notes: null,
@@ -123,6 +130,18 @@ export function AddSightingModal({
       });
       return;
     }
+
+    await addSighting({
+      userId: user.id,
+      encodedImage: formData.encodedImage,
+      location: formData.location,
+      notes: formData.notes,
+      timestamp: new Date().toISOString(),
+    });
+
+    if (!addSightingLoading && !addSightingError) {
+      onClose();
+    }
   }
 
   useEffect(() => {
@@ -150,6 +169,7 @@ export function AddSightingModal({
       header="Add a New Sighting"
       subHeader="Fill in the details below to add a new sighting."
       onClose={onClose}
+      isContentLoading={addSightingLoading}
       content={
         <div className="flex flex-col space-y-4 p-1">
           {formData.encodedImage ? (
@@ -217,6 +237,13 @@ export function AddSightingModal({
               value={formData.location?.lng || ""}
               type="string"
               label="Longitude"
+              readOnly
+              disabled
+            />
+            <Input
+              value={formData.timestamp || new Date().toISOString()}
+              type="string"
+              label="Timestamp"
               readOnly
               disabled
             />
