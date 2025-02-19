@@ -227,8 +227,6 @@ postsRouter.post("/create", async (req: CreatePostRequestBody, res) => {
 
   await checkAndAwardBadges(userId);
 
-  // TODO: Check if the user qualifies for a badge, and if so, create a badge in the database
-
   res.status(HTTP_CODES.OK).json(
     getFormattedApiResponse({
       message: "Post created successfully",
