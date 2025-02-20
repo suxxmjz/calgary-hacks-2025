@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import CommunityPage from "./pages/CommunityPage";
 import {
   COMMUNITY_POSTS_ROUTE,
   HOME_ROUTE,
@@ -17,6 +16,7 @@ import { AuthProvider } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { CommunityPage } from "./pages/CommunityPage";
 
 export const BASE_API_URL = `${
   import.meta.env.VITE_BACKEND_API_URL

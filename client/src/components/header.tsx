@@ -9,7 +9,7 @@ export function Header({ header, subtext }: HeaderProps): JSX.Element {
   return (
     <div>
       <h1 className="font-medium text-header text-lg">{header}</h1>
-      <p className="text-sm text-accentText">{subtext}</p>
+      {subtext && <p className="text-sm text-accentText">{subtext}</p>}
     </div>
   );
 }
