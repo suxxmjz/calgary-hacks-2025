@@ -1,29 +1,30 @@
-import { Post } from "@/types/postTypes";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "./use-toast";
 import { ApiResponse } from "@/types/apiTypes";
 import { BASE_API_URL } from "@/App";
 
-interface UseFetchPostsReturn {
-  readonly posts: readonly Post[];
+interface UseFetchUserUpvotesReturn {
+  readonly userUpvotedPostIds: readonly number[];
   readonly loading: boolean;
   readonly error: boolean;
-  readonly refetchPosts: () => void;
+  readonly refetchUserUpvotedPostIds: () => void;
 }
 
-export function useFetchPosts({
+export function useFetchUserUpvotes({
   userId,
 }: {
   userId: number | undefined;
-}): UseFetchPostsReturn {
+}): UseFetchUserUpvotesReturn {
   const { toast } = useToast();
 
-  const endpoint = userId ? `posts/${userId}` : `posts`;
-
   const { isPending, isError, data, refetch } = useQuery({
-    queryKey: ["posts", userId],
+    queryKey: ["userUpvotedPostIds", userId],
     queryFn: async () => {
-      const response = await fetch(`${BASE_API_URL}/${endpoint}`, {
+      if (!userId) {
+        return [];
+      }
+
+      const response = await fetch(`${BASE_API_URL}/posts/votes/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,21 +33,22 @@ export function useFetchPosts({
 
       if (!response.ok) {
         toast({
-          title: "Error fetching posts",
+          title: "Error fetching user upvoted posts",
           description: "Please try again later.",
         });
         return;
       }
 
-      const postsResponse: ApiResponse<readonly Post[]> = await response.json();
-      return postsResponse.data;
+      const upvotedPostIdsResponse: ApiResponse<readonly number[]> =
+        await response.json();
+      return upvotedPostIdsResponse.data;
     },
   });
 
   return {
-    posts: data ?? [],
+    userUpvotedPostIds: data ?? [],
     loading: isPending,
     error: isError,
-    refetchPosts: refetch,
+    refetchUserUpvotedPostIds: refetch,
   };
 }

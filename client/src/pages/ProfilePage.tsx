@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { PostCard } from "@/components/postCard";
 import { useAuth } from "@/hooks/useAuth";
 import { useFetchPosts } from "@/hooks/useFetchPosts";
+import { useFetchUserUpvotes } from "@/hooks/useFetchUserUpvotes";
 import {
   DEFAULT_SORT_OPTION,
   DROPDOWN_SORT_OPTIONS,
@@ -16,6 +17,7 @@ export function ProfilePage(): JSX.Element {
   const { user } = useAuth();
 
   const { posts: userPosts } = useFetchPosts({ userId: user?.id });
+  const { userUpvotedPostIds } = useFetchUserUpvotes({ userId: user?.id });
 
   const [sortOption, setSortOption] = useState(DEFAULT_SORT_OPTION);
 
@@ -51,7 +53,13 @@ export function ProfilePage(): JSX.Element {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 mt-4">
         {sortedUserPosts.length ? (
           sortedUserPosts.map((post) => {
-            return <PostCard key={post.id} post={post} />;
+            return (
+              <PostCard
+                key={post.id}
+                post={post}
+                isUpvotedByUser={userUpvotedPostIds.includes(post.id)}
+              />
+            );
           })
         ) : (
           <p className="text-sm text-header">No posts available.</p>

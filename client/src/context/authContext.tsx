@@ -149,12 +149,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   // Check if user is already logged in on page load/refresh
   useEffect(() => {
-    refreshToken();
-    const refreshInterval = setInterval(refreshToken, REFRESH_INTERVAL_MS);
+    if (!user) {
+      refreshToken();
+      const refreshInterval = setInterval(refreshToken, REFRESH_INTERVAL_MS);
 
-    return () => {
-      clearInterval(refreshInterval);
-    };
+      return () => {
+        clearInterval(refreshInterval);
+      };
+    }
   }, []);
 
   return (

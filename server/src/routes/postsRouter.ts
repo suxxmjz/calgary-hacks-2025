@@ -4,6 +4,7 @@ import {
   getPostById,
   getPosts,
   getPostsByUserId,
+  getPostUpvotesByUserId,
   getUpvoteByPostIdAndUserId,
   updatePostVotes,
 } from "../models/postsModel";
@@ -323,6 +324,39 @@ postsRouter.post("/vote", async (req: UpvotePostRequestBody, res) => {
     getFormattedApiResponse({
       message: "Post votes updated successfully",
       code: HTTP_CODES.OK,
+    })
+  );
+});
+
+postsRouter.get("/votes/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  if (!userId) {
+    res.status(HTTP_CODES.BAD_REQUEST).json(
+      getFormattedApiResponse({
+        message: "Missing required User ID.",
+        code: HTTP_CODES.BAD_REQUEST,
+      })
+    );
+    return;
+  }
+
+  const sanitizedUserId = userId as unknown as number;
+  const userUpvotes = await getPostUpvotesByUserId(sanitizedUserId);
+  if (!userUpvotes) {
+    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(
+      getFormattedApiResponse({
+        message: `Error fetching upvotes from database for user with ID: ${userId}`,
+        code: HTTP_CODES.INTERNAL_SERVER_ERROR,
+      })
+    );
+    return;
+  }
+
+  res.status(HTTP_CODES.OK).json(
+    getFormattedApiResponse({
+      message: "Upvotes fetched successfully",
+      code: HTTP_CODES.OK,
+      data: userUpvotes,
     })
   );
 });

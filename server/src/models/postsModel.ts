@@ -16,7 +16,7 @@ export async function getPostById(
     }
 
     const postUpvotes = await getPostUpvotes(postId);
-    if (!postUpvotes) {
+    if (postUpvotes === undefined) {
       throw new Error(`Error fetching post upvotes for Post ID: ${postId}`);
     }
 

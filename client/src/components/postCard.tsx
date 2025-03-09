@@ -5,17 +5,39 @@ import { CustomImage } from "./customImage";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { MdOutlineFlipCameraAndroid } from "react-icons/md";
 import { formatAnimalName } from "@/utils/formatting";
+import { useVotePost } from "@/hooks/useVotePost";
 
 const THREE_DECIMAL_PLACES = 3;
 
 interface PostCardProps {
   readonly post: Post;
+  readonly isUpvotedByUser: boolean;
+  readonly onVoteSuccess: () => void;
+  readonly userId: number;
 }
 
-export function PostCard({ post }: PostCardProps): JSX.Element {
+export function PostCard({
+  post,
+  isUpvotedByUser,
+  onVoteSuccess,
+  userId,
+}: PostCardProps): JSX.Element {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const [isLiked, setIsLiked] = useState(true);
+  const [isLiked, setIsLiked] = useState(isUpvotedByUser);
+
+  const { votePost } = useVotePost({ userId, onSuccess: onVoteSuccess });
+
+  async function handleVote(): Promise<void> {
+    if (isUpvotedByUser) {
+      await votePost({ postId: post.id, operation: "decrement" });
+      setIsLiked(false);
+      return;
+    }
+
+    await votePost({ postId: post.id, operation: "increment" });
+    setIsLiked(true);
+  }
 
   return (
     <Container className="relative shadow-md space-y-2 transition-all h-80 md:h-96 lg:h-[370px] overflow-y-auto">
@@ -44,12 +66,12 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
               {isLiked ? (
                 <FaHeart
                   className="text-red-500 cursor-pointer"
-                  onClick={() => setIsLiked(false)}
+                  onClick={handleVote}
                 />
               ) : (
                 <FaRegHeart
                   className="text-red-500 cursor-pointer"
-                  onClick={() => setIsLiked(true)}
+                  onClick={handleVote}
                 />
               )}
               <span className="text-base text-paragraph font-normal">
